@@ -13,7 +13,7 @@ import os
 # --- Load ENV ---
 load_dotenv()
 OPENAI_API_KEY = os.getenv("OPENAI_API_KEY")
-MONGO_DB_PASS = os.getenv("MONGO_DB_PASS")
+MONGO_DB_URI = os.getenv("MONGO_DB_URI")
 
 # --- Init API ---
 app = FastAPI()
@@ -21,15 +21,14 @@ app = FastAPI()
 # --- CORS config ---
 app.add_middleware(
     CORSMiddleware,
-    allow_origins=["*"],
+    allow_origins=["https://abang-shopeebot.web.app/"],
     allow_credentials=True,
     allow_methods=["*"],
     allow_headers=["*"],
 )
 
 # --- Setup MongoDB & Embeddings ---
-uri = f"mongodb+srv://wajemonstudio:{MONGO_DB_PASS}@wajemon.okrzgyr.mongodb.net/"
-client = MongoClient(uri, tls=True)
+client = MongoClient(MONGO_DB_URI, tls=True)
 collection = client['shopee']['answer_vec']
 
 embedding = HuggingFaceEmbeddings(model_name="sentence-transformers/all-MiniLM-L6-v2")
