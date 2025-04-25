@@ -1,4 +1,5 @@
 from fastapi import FastAPI, Request
+from fastapi.responses import JSONResponse
 from pydantic import BaseModel
 from pymongo import MongoClient
 from langchain.vectorstores import MongoDBAtlasVectorSearch
@@ -71,3 +72,12 @@ class QuestionInput(BaseModel):
 async def ask_question(data: QuestionInput):
     result = qa_gpt.run(data.question)
     return {"answer": result}
+
+@app.options("/{rest_of_path:path}")
+async def options_handler(rest_of_path: str, request: Request):
+    response = JSONResponse(content={"message": "CORS preflight"})
+    response.headers["Access-Control-Allow-Origin"] = "https://abang-shopeebot.web.app"
+    response.headers["Access-Control-Allow-Methods"] = "POST, GET, OPTIONS"
+    response.headers["Access-Control-Allow-Headers"] = "*"
+    response.headers["Access-Control-Allow-Credentials"] = "true"
+    return response
