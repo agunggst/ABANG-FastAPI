@@ -23,7 +23,7 @@ app = FastAPI()
 # --- CORS config ---
 app.add_middleware(
     CORSMiddleware,
-    allow_origins=["https://abang-shopeebot.web.app/"],
+    allow_origins=["*"],
     allow_credentials=True,
     allow_methods=["*"],
     allow_headers=["*"],
@@ -73,11 +73,11 @@ async def ask_question(data: QuestionInput):
     result = qa_gpt.run(data.question)
     return {"answer": result}
 
-@app.options("/{rest_of_path:path}")
-async def options_handler(rest_of_path: str, request: Request):
-    response = JSONResponse(content={"message": "CORS preflight"})
-    response.headers["Access-Control-Allow-Origin"] = "https://abang-shopeebot.web.app"
-    response.headers["Access-Control-Allow-Methods"] = "POST, GET, OPTIONS"
-    response.headers["Access-Control-Allow-Headers"] = "*"
-    response.headers["Access-Control-Allow-Credentials"] = "true"
-    return response
+# @app.options("/{rest_of_path:path}")
+# async def options_handler(rest_of_path: str, request: Request):
+#     response = JSONResponse(content={"message": "CORS preflight"})
+#     response.headers["Access-Control-Allow-Origin"] = "https://abang-shopeebot.web.app"
+#     response.headers["Access-Control-Allow-Methods"] = "POST, GET, OPTIONS"
+#     response.headers["Access-Control-Allow-Headers"] = "*"
+#     response.headers["Access-Control-Allow-Credentials"] = "true"
+#     return response
